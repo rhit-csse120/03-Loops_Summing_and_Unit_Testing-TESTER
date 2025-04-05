@@ -18,343 +18,141 @@ Authors: David Mutchler, Rachel Krohn, Dave Fisher, Shawn Bohner, Sriram Mohan,
 Academic Integrity: I got help on this module from:
          PUT_HERE_THE_NAMES_OF_PEOPLE_WHO_HELPED_YOU_ON_THIS_MODULE_(IF_ANY).
 """  # DONE: If you got help from anyone on this module, list their names here.
+import sys
+import multiprocessing
 
-import m4t_tester
+
+COLOR_CODES = {
+    "black": 20,
+    "red": 31,
+    "green": 32,
+    "yellow": 33,
+    "blue": 34,
+    "magenta": 35,
+    "cyan": 36,
+    "white": 37,
+}
+
+TIMEOUT_SECONDS = 10
 
 
-def main():
+def run_tests(module_to_test):
     """Calls the   TEST   functions in this module."""
-    run_test_sum_of_digits()
-    run_test_digits_in_cube()
-    run_test_digits_in_power()
-    run_test_fancy_sums_of_digits()
-
-    # -------------------------------------------------------------------------
-    # DONE: 9. DO THIS LAST!
-    #    -- Uncomment the line of code below to run the main function
-    #         in m4t_tester.py (do not make changes to it).
-    #         It runs OUR tests on your code.
-    #    -- Check to see whether all test cases indicate they
-    #          "COMPLETED SUCCESSFULLY!"
-    #    -- If your code fails any of OUR tests but passes YOUR tests,
-    #         then you are likely not TESTING the methods correctly.
-    #       ** Ask a student assistant or instructor for help in that case. **
-    # -------------------------------------------------------------------------
-
-    m4t_tester.main()
+    passed, failed = 0, 0
+    passed, failed = (passed, failed) + run_test_sum_of_digits(module_to_test)
+    failed += run_test_digits_in_cube(module_to_test)
+    failed += run_test_digits_in_power(module_to_test)
+    failed += run_test_fancy_sums_of_digits(module_to_test)
+    return failed
 
 
-def run_test_sum_of_digits():
+def run_test_sum_of_digits(module_to_test):
     """Tests the  sum_of_digits   function."""
-    # -------------------------------------------------------------------------
-    # DONE: 2. Implement this TEST function, as follows:
-    #  ___
-    #  Step 1:  This TEST function tests the  sum_of_digits  function.
-    #    So read the doc-string of the  sum_of_digits  function
-    #    defined below.  Be sure that you understand from the
-    #    doc-string what the  sum_of_digits  function SHOULD return.
-    #  ___
-    #  Step 2:  Pick a test case:  a number that you could send as
-    #    an actual argument to the  sum_of_digits  function.
-    #    For example, you could pick the test case  826.
-    #  ___
-    #  Step 3: Figure out the CORRECT (EXPECTED) answer for your
-    #    test case.  In the example of  826  the correct answer
-    #    for the sum of its digits is  8 + 2 + 6, which is 16.
-    #  ___
-    #  Step 4: Write code that prints both the EXPECTED answer
-    #    and the ACTUAL answer returned when you call the function.
-    #    See the example below.
-    # -------------------------------------------------------------------------
-    print()
-    print("--------------------------------------------------")
-    print("Testing the   sum_of_digits   function:")
-    print("--------------------------------------------------")
-
-    # Test 1:
-    expected = 16
-    answer = sum_of_digits(826)
-    print("Test 1 expected:", expected)
-    print("       actual:  ", answer)
-
-    # -------------------------------------------------------------------------
-    # DONE: 2 (continued).
-    #   Below this comment, add 3 more test cases of your own choosing.
-    # -------------------------------------------------------------------------
-
-    # Test 2:
-    expected = 20
-    answer = sum_of_digits(83135)
-    print("Test 2 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 3:
-    expected = 11
-    answer = sum_of_digits(2900)
-    print("Test 3 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 4:
-    expected = 5
-    answer = sum_of_digits(5)
-    print("Test 4 expected:", expected)
-    print("       actual:  ", answer)
+    f = module_to_test.sum_of_digits
+    tests_failed = 0
+    tests_failed += run_test(f, [826], 16)
+    tests_failed += run_test(f, [83135], 20)
+    tests_failed += run_test(f, [2900], 11)
+    tests_failed += run_test(f, [1000000], 1)
+    return tests_failed
 
 
-def sum_of_digits(number):
-    """
-    What comes in:  An integer.
-    What goes out:  Returns the sum of the digits in the given integer.
-    Side effects:   None.
-    Example:
-      If the integer is 83135,
-      this function returns (8 + 3 + 1 + 3 + 5), which is 20.
-    Type hints:
-      type: number: int
-      :rtype: int
-    """
-    # -------------------------------------------------------------------------
-    # Students:
-    #   Do NOT touch this function - it has no _TODO_ in it.
-    #   Do NOT copy code from this function.
-    #
-    # Instead, ** CALL ** this function as needed in the other problems.
-    #
-    # Ask for help if you are unsure what it means to CALL a function.
-    # The ONLY part of this function that you need to understand is
-    # the doc-string above.  Treat this function as a black box.
-    # -------------------------------------------------------------------------
-    if number < 0:
-        number = -number
-
-    digit_sum = 0
-    while True:
-        if number == 0:
-            break
-        digit_sum = digit_sum + (number % 10)
-        number = number // 10
-
-    return digit_sum
-
-
-def run_test_digits_in_cube():
+def run_test_digits_in_cube(module_to_test):
     """Tests the   digits_in_cube   function."""
-    # -------------------------------------------------------------------------
-    # DONE: 3. Implement this function.
-    #   It TESTS the  digits_in_cube  function defined below.
-    #   Include at least **   3   ** tests.
-    #   ___
-    #   To implement this TEST function, use the same 4 steps as above:
-    #   ___
-    #   Step 1: Read the doc-string of  digits_in_cube  below.
-    #     Understand what that function SHOULD return.
-    #   ___
-    #   Step 2:  Pick a test case:  a number(s) that you could send as
-    #     actual argument(s) to the  digits_in_cube  function.
-    #   ___
-    #   Step 3: Figure out the CORRECT (EXPECTED) answer for your test case.
-    #  ___
-    #   Step 4: Write code that prints both the EXPECTED answer
-    #     and the ACTUAL answer returned when you call the function.
-    #     Follow the same form as in previous examples.
-    #  ___
-    #  Include at least **   3   ** tests.
-    # -------------------------------------------------------------------------
-    print()
-    print("--------------------------------------------------")
-    print("Testing the   digits_in_cube   function:")
-    print("--------------------------------------------------")
-
-    # Test 1:
-    expected = 8  # Digits in 125
-    answer = digits_in_cube(5)
-    print("Test 1 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 2:
-    expected = 1
-    answer = digits_in_cube(10000000000000)
-    print("Test 2 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 3:
-    expected = 19  # Digits in 4096
-    answer = digits_in_cube(16)
-    print("Test 3 expected:", expected)
-    print("       actual:  ", answer)
+    f = module_to_test.digits_in_cube
+    tests_failed = 0
+    tests_failed += run_test(f, [5], 8)
+    tests_failed += run_test(f, [10000000000000], 1)
+    tests_failed += run_test(f, [16], 19)
+    tests_failed += run_test(f, [12], 18)
+    tests_failed += run_test(f, [10000], 1)
+    return tests_failed
 
 
-def digits_in_cube(n):
-    """
-    What comes in:  A positive integer.
-    What goes out:  Returns the sum of the digits in the CUBE of the integer.
-    Side effects:   None.
-    Example:
-      If the integer (n) is 5    (so n cubed is 125),
-      this function returns (1 + 2 + 5), which is 8.
-    Type hints:
-      :type n: int
-      :rtype: int
-    """
-    # -------------------------------------------------------------------------
-    # DONE: 4. Implement and test this function.
-    #   Note that you should write its TEST function first (above).
-    #   That is called TEST-FIRST DEVELOPMENT (TFD).
-    #  ########################################################################
-    #  IMPORTANT: CALL, as many times as needed,
-    #    the    sum_of_digits    function that is DEFINED ABOVE.
-    #  ########################################################################
-    # -------------------------------------------------------------------------
-    step1 = n**3
-    step2 = sum_of_digits(step1)
-    return step2
-
-
-def run_test_digits_in_power():
+def run_test_digits_in_power(module_to_test):
     """Tests the   digits_in_power   function."""
-    # -------------------------------------------------------------------------
-    # DONE: 5. Implement this function.
-    #   It TESTS the  digits_in_power  function defined below.
-    #   Include at least **   3   ** tests.
-    #   ___
-    #   Use the same 4-step process as in implementing previous TEST functions.
-    # -------------------------------------------------------------------------
-    print()
-    print("--------------------------------------------------")
-    print("Testing the   digits_in_power   function:")
-    print("--------------------------------------------------")
-
-    # Test 1:
-    expected = 18  # Digits in 1728
-    answer = digits_in_power(12, 3)
-    print("Test 1 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 2:
-    expected = 13  # Digits in 256
-    answer = digits_in_power(16, 2)
-    print("Test 2 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 3:
-    expected = 45  # Digits in 1234567890
-    answer = digits_in_power(1234567890, 1)
-    print("Test 3 expected:", expected)
-    print("       actual:  ", answer)
+    f = module_to_test.digits_in_power
+    tests_failed = 0
+    tests_failed += run_test(f, [12, 3], 18)
+    tests_failed += run_test(f, [16, 2], 13)
+    tests_failed += run_test(f, [1234567890, 1], 45)
+    tests_failed += run_test(f, [255, 3], 36)
+    tests_failed += run_test(f, [2, 10], 7)
+    tests_failed += run_test(f, [10000, 1], 1)
+    return tests_failed
 
 
-def digits_in_power(n, k):
-    """
-    What comes in:  Two positive integers, n and k.
-    What goes out:
-      The sum of the digits in x, where x is n raised to the kth power.
-    Side effects:   None.
-    Example:
-      If the arguments are 12 and 3, respectively,
-      this function returns 18
-      since 12 to the 3rd power is 1728 (whose digits sum to 18).
-    Type hints:
-      :type n: int
-      :type k: int
-      :rtype: int
-    """
-    # -------------------------------------------------------------------------
-    # DONE: 6. Implement and test this function.
-    #  ########################################################################
-    #  IMPORTANT: CALL, as many times as needed,
-    #    the    sum_of_digits    function that is DEFINED ABOVE.
-    #  ########################################################################
-    # -------------------------------------------------------------------------
-    step1 = n**k
-    step2 = sum_of_digits(step1)
-    return step2
-
-
-def run_test_fancy_sums_of_digits():
+def run_test_fancy_sums_of_digits(module_to_test):
     """Tests the   fancy_sums_of_digits   function."""
-    # -------------------------------------------------------------------------
-    # DONE: 7. Implement this function.
-    #   It TESTS the  fancy_sums_of_digits  function defined below.
-    #   Include at least **   3   ** tests.
-    #   ___
-    #   Use the same 4-step process as in implementing the previous
-    #   TEST functions.
-    # -------------------------------------------------------------------------
-    print()
-    print("--------------------------------------------------")
-    print("Testing the   fancy_sums_of_digits   function:")
-    print("--------------------------------------------------")
-
-    # -------------------------------------------------------------------------
-    # HINT:  For your 1st test, consider  n=10.  Figure out BY HAND
-    # the correct (expected) answer for that test case.  (It's easy.)
-    # The doc-string below gives test cases you can use for
-    # your 2nd and 3rd tests but READ THOSE TEST CASES CAREFULLY
-    # in the doc-string to be sure that you understand the specification.
-    # -------------------------------------------------------------------------
-
-    # Test 1:
-    expected = 1
-    answer = fancy_sums_of_digits(10)
-    print("Test 1 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 2:
-    expected = 19084
-    answer = fancy_sums_of_digits(2)
-    print("Test 2 expected:", expected)
-    print("       actual:  ", answer)
-
-    # Test 3:
-    expected = 124309
-    answer = fancy_sums_of_digits(35)
-    print("Test 3 expected:", expected)
-    print("       actual:  ", answer)
+    f = module_to_test.fancy_sums_of_digits
+    tests_failed = 0
+    tests_failed += run_test(f, [10], 1)
+    tests_failed += run_test(f, [2], 19084)
+    tests_failed += run_test(f, [35], 124309)
+    tests_failed += run_test(f, [11], 76738)
+    tests_failed += run_test(f, [10000], 1)
+    return tests_failed
 
 
-def fancy_sums_of_digits(n):
-    """
-    What comes in:  A positive integer n.
-    What goes out:
-      -- Let X denote the   sum   of the digits in (n ** 1000).
-      -- Let Y denote the   sum   of the digits in (n ** 999).
-      This function RETURNS the sum of the digits in (X ** Y).
-    Side effects:   None.
-    Examples:
-      -- If n is 2, then:
-            -- the   sum   of the digits in n ** 1000 is 1366 (trust me!).
-            -- the   sum   of the digits in n ** 999 is 1367 (trust me!).
-            -- so X ** Y is VERY LARGE in this case
-                     (don't try to print it!)
-            -- the   sum   of the digits in (X ** Y) is 19084 (trust me!)
-            -- so this function returns 19084.
-      -- If n is 35, then:
-            -- the sum of the digits in n ** 1000 is 7021 (trust me!).
-            -- the sum of the digits in n ** 999 is 7145 (trust me!).
-            -- so X ** Y is VERY LARGE in this case
-                     (don't try to print it!)
-            -- the sum of the digits in (X ** Y) is 124309 (trust me!)
-            -- so this function returns 124309.
-    Type hints:
-      :type n: int
-      :rtype: int
-    """
-    # -------------------------------------------------------------------------
-    # DONE: 8. Implement and test this function.
-    #  ########################################################################
-    #  IMPORTANT: CALL, as many times as needed,
-    #    the    sum_of_digits    function that is DEFINED ABOVE.
-    #  ########################################################################
-    # -------------------------------------------------------------------------
-    x = sum_of_digits(n**1000)
-    y = sum_of_digits(n**999)
-    z = sum_of_digits(x**y)
-    return z
+def run_test(function, arguments, expected_result):
+    answer = run_with_timeout(function, arguments)
+    if equals(answer, expected_result):
+        return 0
+    elif answer is None:
+        print_colored(
+            "Probably not yet implemented (returned None): " + function.__name__,
+            color="green",
+        )
+        return 1
+    else:
+        print_colored(
+            "{}({}) -> {}, expected {}".format(
+                function.__name__, *arguments, answer, expected_result
+            ),
+            color="red",
+        )
+        return 1
 
 
-# -----------------------------------------------------------------------------
-# Calls  main  to start the ball rolling.
-# This unusual form is necessary for the special testing we provided.
-# -----------------------------------------------------------------------------
-if __name__ == "__main__":
-    main()
+def equals(actual, expected):
+    PRECISION = 10
+    if isinstance(expected, float):
+        return round(actual, PRECISION) == round(expected, PRECISION)
+    else:
+        return actual == expected
+
+
+def run_with_timeout(function, arguments):
+    result_queue = multiprocessing.Queue()
+    process = multiprocessing.Process(
+        target=wrapper, args=(function, arguments, result_queue)
+    )
+    process.start()
+    process.join(TIMEOUT_SECONDS)
+
+    if process.is_alive():
+        process.terminate()
+        print_colored("killed", color="magenta")
+        result = None
+        process.join()
+    else:
+        result = result_queue.get()
+    return result
+
+
+def wrapper(function, arguments, result_queue):
+    try:
+        answer = function(*arguments)
+        result_queue.put(answer)
+    except Exception as e:
+        print_colored("Exception: {}".format(e), color="cyan")
+        result_queue.put(e)
+
+
+def print_colored(*args, color="blue", flush=True, **kwargs):
+    text = ""
+    for arg in args:
+        text = text + " " + str(arg)
+    text = text.replace(" ", "", 1)
+    sys.stdout.write("\033[%sm%s\033[0m" % (COLOR_CODES[color], text))
+    print(**kwargs)
